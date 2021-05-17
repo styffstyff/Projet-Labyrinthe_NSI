@@ -1,4 +1,4 @@
-# Projet-Labyrinthe_NSI
+# Projet - Labyrinthe_NSI
 Projet de fin d'année de terminale NSI
 
 # Participants  
