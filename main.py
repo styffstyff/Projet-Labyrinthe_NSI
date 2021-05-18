@@ -2,7 +2,7 @@
 
 def open_maze(filepath):
     """
-    Open a maze from a given filepath, the maze should be a list of list
+    Open a maze from a given filepath, the maze should be a list of list.
     :return list: maze
     """
     with open(filepath, 'r', encoding='utf-8') as maze_file:
