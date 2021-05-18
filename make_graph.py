@@ -6,4 +6,5 @@ def make_graph(list):
       elif list[i][j] == 3:
         sortie = (i, j)
   graph = {}
-  co_actuel = entré
+  co_actuel = entree
+  
