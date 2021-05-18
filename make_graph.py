@@ -1,3 +1,5 @@
+import main
+
 def make_graph(laby):
   for i in range(len(laby)):
     for j in range(len(laby[i])):
@@ -59,11 +61,5 @@ def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
 
 
 if __name__ == "__main__":
-  laby = [[1, 1, 1, 1, 1, 1],
-          [2, 0, 1, 1, 0, 1],
-          [1, 0, 0, 0, 0, 1],
-          [1, 1, 0, 1, 1, 1],
-          [1, 0, 0, 0, 0, 1],
-          [1, 0, 1, 1, 0, 1],
-          [1, 1, 1, 1, 3, 1]]
+  laby = main.open_maze('./maze.txt')
   print(make_graph(laby))
