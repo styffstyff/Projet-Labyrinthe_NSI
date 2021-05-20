@@ -212,8 +212,17 @@ def rec_dfsa(pos, maze, stack, walls):
     
     return maze
 
+def new_maze(filename, xy):
+    """
+    Creates a txt file with a xy size maze implemented in python list of list in the same directory
+    :return None: 
+    """
 
+    maze = blank_maze(xy)
+    maze = make_walls(maze)
 
+    with open(filename, 'w', encoding='utf-8') as maze_file:
+        maze_file.write(str(maze))
 
 
 if __name__ == "__main__":
@@ -222,7 +231,7 @@ if __name__ == "__main__":
     maze=make_walls(maze)
     for rows in maze:
         print(rows)
-        
+    
     
 
     
