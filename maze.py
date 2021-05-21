@@ -9,9 +9,21 @@ def go_S(pos): return (pos[0]+1, pos[1])
 def go_E(pos): return (pos[0], pos[1]+1)
 def go_W(pos): return (pos[0], pos[1]-1)
 
-wall = lambda maze: [ (x,y) for x, rows in enumerate(maze) for y, value in enumerate(rows) if x==0 or y==0 or x==len(maze[0])-1 or y==len(maze)-1 ]
-
 def distance(AB): return (AB[1][0]-AB[0][0])**2+(AB[1][1]-AB[0][1])**2
+
+def wall(maze):
+    """
+    Get all the coordinates on the side of the wall
+    :return list: list of coordinate
+    """
+    walls=[]
+
+    for y, rows in enumerate(maze):
+        for x, value in enumerate(rows):
+             if x==0 or y==0 or x==len(maze[0])-1 or y==len(maze)-1:
+                 walls.append((y, x))
+    
+    return walls
 
 def mark_start(pos, maze):
     maze[pos[0]][pos[1]]=2
