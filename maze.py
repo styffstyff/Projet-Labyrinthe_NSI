@@ -4,14 +4,14 @@ Maze implementation with list of list
 
 from random import randint
 
-go_N = lambda pos: (pos[0]-1, pos[1])
-go_S = lambda pos: (pos[0]+1, pos[1])
-go_E = lambda pos: (pos[0], pos[1]+1)
-go_W = lambda pos: (pos[0], pos[1]-1)
+def go_N(pos): return (pos[0]-1, pos[1])
+def go_S(pos): return (pos[0]+1, pos[1])
+def go_E(pos): return (pos[0], pos[1]+1)
+def go_W(pos): return (pos[0], pos[1]-1)
 
 wall = lambda maze: [ (x,y) for x, rows in enumerate(maze) for y, value in enumerate(rows) if x==0 or y==0 or x==len(maze[0])-1 or y==len(maze)-1 ]
 
-distance = lambda AB: (AB[1][0]-AB[0][0])**2+(AB[1][1]-AB[0][1])**2
+def distance(AB): return (AB[1][0]-AB[0][0])**2+(AB[1][1]-AB[0][1])**2
 
 def mark_start(pos, maze):
     maze[pos[0]][pos[1]]=2
