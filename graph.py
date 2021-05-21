@@ -18,6 +18,7 @@ def is_vertex(G, v):
 def add_vertex(G, v):
     """
     Adds the vertex `v` to the graph `G`.
+    The vertex `v` must not already be present in the graph `G`.
     :return None:
     """
     assert not is_vertex(G, v), "Can't add a vertex : the vertex already exists."
@@ -25,6 +26,7 @@ def add_vertex(G, v):
 
 def is_arc(G, v1, v2):
     """
+    The vertex `v1` must already be present in the graph `G`.
     :return bool: true if an arc exists between `v1`and v2`
     """
     assert is_vertex(G, v1), "The vertex `v1`doesn't exist."
@@ -33,6 +35,7 @@ def is_arc(G, v1, v2):
 def del_vertex(G, v):
     """
     Deletes the vertex `v` from the graph `G` and all its arcs.
+    The vertex `v` must already be present in the graph `G`.
     :return None:
     """
     assert is_vertex(G, v), "Can't delete the vertex : the vertex doesn't exist."
@@ -44,6 +47,8 @@ def del_vertex(G, v):
 def add_arc(G, v1, v2):
     """
     Adds to the graph `G` an arc from `v1` to `v2`.
+    The vertex `v1` must already be present in the graph `G`.
+    The vertex `v2` must already be present in the graph `G`.
     :return None:
     """
     assert is_vertex(G, v1), "Can't add an arc : the vertex v1 doesn't exist."
@@ -53,6 +58,7 @@ def add_arc(G, v1, v2):
 def del_arc(G, v1, v2):
     """
     Deletes from the graph `G` the arc from `v1` to `v2`.
+    The arc `v1 -> v2` must already exist in the graph `G`.
     :return None:
     """
     assert is_arc(G, v1, v2), "Can't delete an arc : the arc doesn't exist."

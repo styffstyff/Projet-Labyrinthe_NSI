@@ -1,13 +1,14 @@
 import graph
 
-go_N = lambda pos: (pos[0]-1, pos[1])
-go_S = lambda pos: (pos[0]+1, pos[1])
-go_E = lambda pos: (pos[0], pos[1]+1)
-go_W = lambda pos: (pos[0], pos[1]-1)
+def go_N(pos): return (pos[0]-1, pos[1])
+def go_S(pos): return (pos[0]+1, pos[1])
+def go_E(pos): return (pos[0], pos[1]+1)
+def go_W(pos): return (pos[0], pos[1]-1)
 
 def dead_end_filling(G, start, end):
     """
-    Dead-end filling algorithm : https://en.wikipedia.org/wiki/Maze-solving_algorithm#Dead-end_filling
+    Dead-end filling algorithm :
+    https://en.wikipedia.org/wiki/Maze-solving_algorithm#Dead-end_filling
     The idea is to delete vertices that do not lead to any vertex.
     :return string: the solution of the labyrinth
     """
