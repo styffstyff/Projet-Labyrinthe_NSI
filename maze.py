@@ -1,15 +1,23 @@
-""" 
+"""
 Maze implementation with list of list
 """
 
 from random import randint
 
-def go_N(pos): return (pos[0]-1, pos[1])
-def go_S(pos): return (pos[0]+1, pos[1])
-def go_E(pos): return (pos[0], pos[1]+1)
-def go_W(pos): return (pos[0], pos[1]-1)
+def go_n(pos):
+    return (pos[0]-1, pos[1])
 
-def distance(AB): return (AB[1][0]-AB[0][0])**2+(AB[1][1]-AB[0][1])**2
+def go_s(pos):
+    return (pos[0]+1, pos[1])
+
+def go_e(pos):
+    return (pos[0], pos[1]+1)
+
+def go_w(pos):
+    return (pos[0], pos[1]-1)
+
+def distance(points):
+    return (points[1][0]-points[0][0])**2+(points[1][1]-points[0][1])**2
 
 def wall(maze):
     """
@@ -18,11 +26,10 @@ def wall(maze):
     """
     walls=[]
 
-    for y, rows in enumerate(maze):
-        for x, value in enumerate(rows):
-             if x==0 or y==0 or x==len(maze[0])-1 or y==len(maze)-1:
-                 walls.append((y, x))
-    
+    for y_pos, rows in enumerate(maze):
+        for x_pos, value in enumerate(rows):
+            if x_pos==0 or y_pos==0 or x_pos==len(maze[0])-1 or y_pos==len(maze)-1:
+                walls.append((y_pos, x_pos))
     return walls
 
 def mark_start(pos, maze):
@@ -34,10 +41,9 @@ def mark_exit(pos, maze):
     Mark the number 3 on the maze which symbolize the 'exit'
     :return list: maze with an exit
     """
-    
     y_len=len(maze)
     x_len=len(maze[0])
-    
+
     #We select 3 exits point at each 4 corner of the maze
     exit_points=[(0, 1), (0, x_len-2), (y_len-1, 1), (y_len-1, x_len-2)]
     #We choose the furthest
@@ -50,13 +56,12 @@ def mark_exit(pos, maze):
     #We check at one block distance
     if len(pos_move)>0:
         maze[exit_points[0][0]][exit_points[0][1]]=3
-        return maze
     #We check at two block distance
     else:
         pos_move=moves(exit_points[0], maze)
         maze[pos_move[0][0][0]][pos_move[0][0][1]]=0
         maze[exit_points[0][0]][exit_points[0][1]]=3
-        return maze
+    return maze
 
 def mark_wall(pos, maze):
     maze[pos[0]][pos[1]]=1
@@ -68,37 +73,34 @@ def mark_visited(pos, maze):
 
 def add_wall(pos, maze):
     """
-    Add walls around pos 
+    Add walls around pos
     :return tuple: maze, wall in the maze
-
     """
     y_len=len(maze)
     x_len=len(maze[0])
-    neighbors=[go_N(pos), go_S(pos), go_E(pos), go_W(pos)]
-    
-    for pos in neighbors:
-        if y_len>pos[0]>=0 and x_len>pos[1]>=0:
-            if maze[pos[0]][pos[1]]==0:
-                maze[pos[0]][pos[1]]=1
-    
+    neighbors=[go_n(pos), go_s(pos), go_e(pos), go_w(pos)]
+    for coord in neighbors:
+        if y_len>coord[0]>=0 and x_len>coord[1]>=0:
+            if maze[coord[0]][coord[1]]==0:
+                maze[coord[0]][coord[1]]=1
     return maze
 
-def blank_maze(xy):
+def blank_maze(xy_coord):
     """
-    Creates a new maze of xy size.
+    Creates a new maze of xy_coord size.
     :return list: empty maze
     """
 
-    assert xy[0]>=5, "The maze must be larger."
-    assert xy[1]>=5, "The maze must be larger."
+    assert xy_coord[0]>=5, "The maze must be larger."
+    assert xy_coord[1]>=5, "The maze must be larger."
 
-    maze=[[0 for x in range(xy[1])]for y in range(xy[0])]
+    maze=[[0 for x in range(xy_coord[1])]for y in range(xy_coord[0])]
 
     return maze
 
 def is_maze(maze):
     """
-    :return bool: true if the argument is a blank maze 
+    :return bool: true if the argument is a blank maze
     """
 
     x_len=len(maze[0])
@@ -107,7 +109,6 @@ def is_maze(maze):
     for rows in maze:
         if len(rows)<x_len:
             return False
-    
     return True
 
 def moves1(pos, maze):
@@ -119,18 +120,16 @@ def moves1(pos, maze):
     x_len=len(maze[0])
 
     #list of coordinates for 4 directional move
-    pos_move=[go_N(pos), 
-              go_S(pos),
-              go_E(pos),
-              go_W(pos)]
+    pos_move=[go_n(pos),
+              go_s(pos),
+              go_e(pos),
+              go_w(pos)]
 
     move=[]
-    
-    for index, pos in enumerate(pos_move):
-        if y_len>pos[0]>=0 and x_len>pos[1]>=0:
-            if maze[pos[0]][pos[1]]==0:
-                move.append(pos_move[index]) 
-    
+    for index, coord in enumerate(pos_move):
+        if y_len>coord[0]>=0 and x_len>coord[1]>=0:
+            if maze[coord[0]][coord[1]]==0:
+                move.append(pos_move[index])
     return move
 
 def moves(pos, maze):
@@ -143,20 +142,18 @@ def moves(pos, maze):
     x_len=len(maze[0])
 
     #list of couple of position for 4 direction move
-    pos_move=[(go_N(pos), go_N(go_N(pos)) ), 
-              (go_S(pos), go_S(go_S(pos)) ),
-              (go_E(pos), go_E(go_E(pos)) ),
-              (go_W(pos), go_W(go_W(pos)) )]
+    pos_move=[(go_n(pos), go_n(go_n(pos)) ),
+              (go_s(pos), go_s(go_s(pos)) ),
+              (go_e(pos), go_e(go_e(pos)) ),
+              (go_w(pos), go_w(go_w(pos)) )]
 
     move=[]
-    
-    for index, pos in enumerate(pos_move):
-        if y_len>pos[1][0]>=0 and x_len>pos[1][1]>=0:
-            if maze[pos[1][0]][pos[1][1]]==0:
+    for index, coord in enumerate(pos_move):
+        if y_len>coord[1][0]>=0 and x_len>coord[1][1]>=0:
+            if maze[coord[1][0]][coord[1][1]]==0:
                 move.append(pos_move[index])
-            if maze[pos[1][0]][pos[1][1]]==9:
-                move.append(0)   
-    
+            if maze[coord[1][0]][coord[1][1]]==9:
+                move.append(0)
     return move
 
 
@@ -166,7 +163,7 @@ def make_walls(maze):
     :return list: maze
     """
 
-    walls=[walls for walls in wall(maze)]
+    walls=wall(maze)
 
     stack=[]
 
@@ -176,15 +173,14 @@ def make_walls(maze):
     start=walls[randint(0, len(walls)-1)]
     maze = mark_start(start, maze)
     stack.append(start)
-    
     maze=rec_dfsa(start, maze, stack, walls)
 
-    for y,row in enumerate(maze):
-        for x,value in enumerate(row):
+    for y_pos,row in enumerate(maze):
+        for x_pos,value in enumerate(row):
             if value==0:
-                maze[y][x]=1
+                maze[y_pos][x_pos]=1
             if value==9:
-                maze[y][x]=0
+                maze[y_pos][x_pos]=0
 
     maze=mark_exit(start, maze)
 
@@ -194,16 +190,14 @@ def make_walls(maze):
 def rec_dfsa(pos, maze, stack, walls):
     """
     Recursive implementation of the depth-first search algorithm to create walls
-    :return list: the maze full of walls 
+    :return list: the maze full of walls
     """
 
     #If the stack is empty every accessible point have been reached
     if len(stack)==0:
         return maze
-    
     pos_move=moves(pos, maze)
-    
-    #If every neighbor is already visited we move backward 
+    #If every neighbor is already visited we move backward
     if pos_move.count(0) == len(pos_move):
         pos=stack.pop()
         rec_dfsa(pos, maze, stack, walls)
@@ -211,39 +205,33 @@ def rec_dfsa(pos, maze, stack, walls):
     else:
         pos_move=[position for position in pos_move if position!=0]
         move=pos_move[randint(0,len(pos_move)-1)]
-        for m in move:
-            maze=mark_visited(m, maze)
-            stack.append(m)
-                
+        for coord in move:
+            maze=mark_visited(coord, maze)
+            stack.append(coord)
         maze=add_wall(pos, maze)
 
         maze=add_wall(stack[-2], maze)
 
 
         rec_dfsa(move[1], maze, stack, walls)
-    
+
     return maze
 
-def new_maze(filename, xy):
+def new_maze(filename, xy_coord):
     """
-    Creates a txt file with a xy size maze implemented in python list of list in the same directory
-    :return None: 
+    Creates a txt file with a xy_coord size maze implemented
+    in python list of list in the same directory
+    :return None:
     """
 
-    maze = blank_maze(xy)
+    maze = blank_maze(xy_coord)
     maze = make_walls(maze)
 
     with open(filename, 'w', encoding='utf-8') as maze_file:
-        maze_file.write(str(maze))
-
+        maze_file.write('[')
+        for rows in maze:
+            maze_file.writelines(str(rows)+', \n')
+        maze_file.write(']')
 
 if __name__ == "__main__":
-    xy=(22,22)
-    maze=blank_maze(xy)
-    maze=make_walls(maze)
-    for rows in maze:
-        print(rows)
-    
-    
-
-    
+    new_maze('./maze.txt', (22,22) )
