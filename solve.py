@@ -125,5 +125,5 @@ if __name__ == "__main__":
     graph.add_arc(G, (4, 2), (4, 4))
     graph.add_arc(G, (4, 4), end)
 
-    assert dead_end_filling(G, start, end) == "ESESSEESS", dead_end_filling(G, start, end)
+    assert dead_end_filling(G, start, end) == "ESESSEESS"
     assert depth_first_search(G, start, end) == "ESESSEESS"
