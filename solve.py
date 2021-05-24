@@ -1,3 +1,4 @@
+from copy import deepcopy
 import graph
 
 def go_N(pos): return (pos[0]-1, pos[1])
@@ -5,29 +6,14 @@ def go_S(pos): return (pos[0]+1, pos[1])
 def go_E(pos): return (pos[0], pos[1]+1)
 def go_W(pos): return (pos[0], pos[1]-1)
 
-def dead_end_filling(G, start, end):
+def vertices_to_path(vertices):
     """
-    Dead-end filling algorithm :
-    https://en.wikipedia.org/wiki/Maze-solving_algorithm#Dead-end_filling
-    The idea is to delete vertices that do not lead to any vertex.
-    :return string: the solution of the labyrinth
+    Translates from list of vertices to path ("NSEW").
+    :return str: path ("NSEW") from `vertices[0]` to `vertices[-1]`
     """
-    stop = False
-    while not stop:
-        stop = True
-        # usage of `list(G)` instead of `G.items()`
-        # to avoid `RuntimeError: dictionary changed size during iteration`
-        for k in list(G):
-            if G[k] == set() and k != end:
-                graph.del_vertex(G, k)
-                stop = False
-
-    # translate from graph to path
-    pos = start
     path = ""
-    while pos != end:
-        assert len(G[pos]) == 1, "Maze unsolvable using dead_end_filling algorithm."
-        next_pos = list(G[pos])[0]
+    for idx, pos in enumerate(vertices[:-1]):
+        next_pos = vertices[idx+1]
         while pos != next_pos:
             if pos[0] < next_pos[0]:
                 pos = go_S(pos)
@@ -42,6 +28,64 @@ def dead_end_filling(G, start, end):
                 pos = go_W(pos)
                 path += "W"
     return path
+
+def dead_end_filling(G, start, end):
+    """
+    Dead-end filling algorithm :
+    https://en.wikipedia.org/wiki/Maze-solving_algorithm#Dead-end_filling
+    The idea is to delete vertices that do not lead to any vertex.
+    Maze must have only one solution.
+    :return str: the solution of the labyrinth
+    """
+    G = deepcopy(G)
+    stop = False
+    while not stop:
+        stop = True
+        # usage of `list(G)` instead of `G.items()`
+        # to avoid `RuntimeError: dictionary changed size during iteration`
+        for k in list(G):
+            if G[k] == set() and k != end:
+                graph.del_vertex(G, k)
+                stop = False
+
+    # translate from graph to a list of vertices
+    pos = start
+    vertices = [pos]
+    while pos != end:
+        assert len(G[pos]) == 1, "Maze unsolvable using dead_end_filling algorithm."
+        next_pos = list(G[pos])[0]
+        vertices.append(next_pos)
+        pos = next_pos
+
+    return vertices_to_path(vertices)
+
+def depth_first_search(G, start, end, cur_vertex=None, visited=None, path=None):
+    """
+    Depth-first search algorithm.
+    Follow a path util its end.
+    If it leads to a dead-end, choose another path.
+    If it leads to the end of the maze, return this path.
+    :return str: the solution of the labyrinth
+    """
+    if cur_vertex is None:
+        cur_vertex = start
+    if visited is None:
+        visited = set()
+        visited.add(start)
+    if path is None:
+        path = list()
+
+    path.append(cur_vertex)
+
+    # iterates on each adjacent vertex that has not already been visited
+    for vertex in G[cur_vertex].difference(visited):
+        if vertex == end:
+            path.append(vertex)
+            return vertices_to_path(path)
+
+        res = depth_first_search(G, start, end, vertex, visited, path)
+        if res:
+            return res
 
 if __name__ == "__main__":
     """
@@ -81,4 +125,5 @@ if __name__ == "__main__":
     graph.add_arc(G, (4, 2), (4, 4))
     graph.add_arc(G, (4, 4), end)
 
-    assert dead_end_filling(G, start, end) == "ESESSEESS"
+    assert dead_end_filling(G, start, end) == "ESESSEESS", dead_end_filling(G, start, end)
+    assert depth_first_search(G, start, end) == "ESESSEESS"
