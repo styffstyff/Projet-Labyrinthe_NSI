@@ -1,4 +1,5 @@
-import maze
+import main
+from graph import *
 
 
 def make_graph(laby):
@@ -8,70 +9,64 @@ def make_graph(laby):
         entree = (i, j)
       elif laby[i][j] == 3:
         sortie = (i, j)
-  graph = {}
+  graph = new_graph()
+  add_vertex(graph, entree)
   return noeud_suiv(laby, graph, entree)
 
 
-def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
-  if laby[noeud[0]][noeud[1]] == 3:
-    graph[noeud] = None
-    return graph
+def noeud_suiv(laby, graph, noeud):
   nord = (noeud[0]-1, noeud[1])
   sud = (noeud[0]+1, noeud[1])
   est = (noeud[0], noeud[1]+1)
   ouest = (noeud[0], noeud[1]-1)
-  graph[noeud] = None
   try:
     if laby[nord[0]][nord[1]] == 0 or laby[nord[0]][nord[1]] == 3:
-      if noeud_precedent == (nord):
+      if is_vertex(graph, nord):
         pass
       else:
-        if graph[noeud]==None:
-          graph[noeud]=nord
-        else:
-          graph[noeud]=graph[noeud], nord
-        noeud_suiv(laby, graph, nord, noeud)
+        add_vertex(graph, nord)
+        add_arc(graph, noeud, nord)
+        noeud_suiv(laby, graph, nord)
   except IndexError:
     pass
   try:
     if laby[sud[0]][sud[1]] == 0 or laby[sud[0]][sud[1]] == 3:
-      if noeud_precedent == (sud):
+      if is_vertex(graph, sud):
         pass
       else:
-        if graph[noeud]==None:
-          graph[noeud]=sud
-        else:
-          graph[noeud]=graph[noeud], sud
-        noeud_suiv(laby, graph, sud, noeud)
+        add_vertex(graph, sud)
+        add_arc(graph, noeud, sud)
+        noeud_suiv(laby, graph, sud)
   except IndexError:
     pass
   try:
     if laby[est[0]][est[1]] == 0 or laby[est[0]][est[1]] == 3:
-      if noeud_precedent == (est):
+      if is_vertex(graph, est):
         pass
       else:
-        if graph[noeud]==None:
-          graph[noeud]=est
-        else:
-          graph[noeud]=graph[noeud], est
-        noeud_suiv(laby, graph, est, noeud)
+        add_vertex(graph, est)
+        add_arc(graph, noeud, est)
+        noeud_suiv(laby, graph, est)
   except IndexError:
     pass
   try:
     if laby[ouest[0]][ouest[1]] == 0 or laby[ouest[0]][ouest[1]] == 3:
-      if noeud_precedent == (ouest):
+      if is_vertex(graph, ouest):
         pass
       else:
-        if graph[noeud]==None:
-          graph[noeud]=ouest
-        else:
-          graph[noeud]=graph[noeud], ouest
-        noeud_suiv(laby, graph, ouest, noeud)
+        add_vertex(graph, ouest)
+        add_arc(graph, noeud, ouest)
+        noeud_suiv(laby, graph, ouest)
   except IndexError:
     pass
   return graph
 
 
 if __name__ == "__main__":
-  laby = maze.open_maze('./maze.txt')
-  print(make_graph(laby))
+  laby = [[1, 1, 1, 1, 1, 1],
+     [2, 0, 1, 1, 0, 1],
+     [1, 0, 0, 0, 0, 1],
+     [1, 1, 0, 1, 1, 1],
+     [1, 0, 0, 0, 0, 1],
+     [1, 0, 1, 1, 0, 1],
+     [1, 1, 1, 1, 3, 1]]
