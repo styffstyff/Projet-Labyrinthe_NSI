@@ -13,16 +13,13 @@ def make_graph(laby):
 
 
 def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
-  if laby[noeud[0],noeud[1]] == 3:
+  if laby[noeud[0]][noeud[1]] == 3:
     graph[noeud] = None
     return graph
   nord = (noeud[0], noeud[1]-1)
   sud = (noeud[0], noeud[1]+1)
   est = (noeud[0]+1, noeud[1])
   ouest = (noeud[0]-1, noeud[1])
-  if [laby[nord], laby[sud], laby[est], laby[ouest]].count(1) == 3:
-    graph[noeud] = None
-    return graph
   graph[noeud] = None
   if nord == 0 or nord == 3:
     if noeud_precedent == (nord):
