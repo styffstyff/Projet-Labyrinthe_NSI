@@ -8,8 +8,7 @@ def make_graph(laby):
       elif laby[i][j] == 3:
         sortie = (i, j)
   graph = {}
-  noeud_suiv(laby, graph, entree)
-  return
+  return noeud_suiv(laby, graph, entree)
 
 
 def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
