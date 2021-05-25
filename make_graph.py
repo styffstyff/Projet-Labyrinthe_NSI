@@ -20,13 +20,13 @@ def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
   est = (noeud[0]+1, noeud[1])
   ouest = (noeud[0]-1, noeud[1])
   graph[noeud] = None
-  if nord == 0 or nord == 3:
+  if laby[nord[0]][nord[1]] == 0 or laby[nord[0]][nord[1]] == 3:
     if noeud_precedent == (nord):
       pass
     else:
       graph[noeud]=nord
       noeud_suiv(laby, graph, nord, noeud)
-  if sud == 0 or sud == 3:
+  if laby[sud[0]][sud[1]] == 0 or laby[sud[0]][sud[1]] == 3:
     if noeud_precedent == (sud):
       pass
     else:
@@ -35,7 +35,7 @@ def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
       else:
         graph[noeud]=graph[noeud], sud
       noeud_suiv(laby, graph, sud, noeud)
-  if est == 0 or est == 3:
+  if laby[est[0]][est[1]] == 0 or laby[est[0]][est[1]] == 3:
     if noeud_precedent == (est):
       pass
     else:
@@ -44,7 +44,7 @@ def noeud_suiv(laby, graph, noeud, noeud_precedent=None):
       else:
         graph[noeud]=graph[noeud], est
       noeud_suiv(laby, graph, est, noeud)
-  if ouest == 0 or ouest == 3:
+  if laby[ouest[0]][ouest[1]] == 0 or laby[ouest[0]][ouest[1]] == 3:
     if noeud_precedent == (ouest):
       pass
     else:
