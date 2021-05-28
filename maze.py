@@ -71,8 +71,6 @@ def mark_visited(pos, maze):
     maze[pos[0]][pos[1]]=9
     return maze
 
-#####################################
-
 def add_wall(pos, maze, walls):
     """
     Add walls around pos
@@ -86,8 +84,6 @@ def add_wall(pos, maze, walls):
             if coord not in walls:
                 walls.append(coord)
     return walls
-
-#####################################
 
 def blank_maze(xy_coord):
     """
@@ -257,15 +253,15 @@ def open_maze(filepath):
             if len(row)>0:
                 maze.append(row)
     
-    for pos_y, row in enumerate(maze_example):
+    for pos_y, row in enumerate(maze):
         for pos_x,value in enumerate(row):
             if value == 2:
                 start =(pos_y, pos_x)
             if value == 3:
                 exit = (pos_y, pos_x)
-    return (maze, start, exit)
+    return maze, start, exit
 
 if __name__ == "__main__":
-    
-    new_maze('./maze.txt', (30,30) )
+    open_maze('./maze.txt')
+    #new_maze('./maze.txt', (30,30) )
 
