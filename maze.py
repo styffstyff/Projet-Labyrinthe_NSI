@@ -248,7 +248,7 @@ def new_maze(filename, xy_coord):
 def open_maze(filepath):
     """
     Open a maze from a given filepath, the maze should be a list of list.
-    :return list: maze
+    :return tuple: maze, start, exit 
     """
     with open(filepath, 'r', encoding='utf-8') as maze_file:
         maze=[]
@@ -256,10 +256,16 @@ def open_maze(filepath):
             row=[ int(n) for n in line if n in "0123" ]
             if len(row)>0:
                 maze.append(row)
-        return maze
+    
+    for pos_y, row in enumerate(maze_example):
+        for pos_x,value in enumerate(row):
+            if value == 2:
+                start =(pos_y, pos_x)
+            if value == 3:
+                exit = (pos_y, pos_x)
+    return (maze, start, exit)
 
 if __name__ == "__main__":
     
-    for e in range(100):
-        new_maze('./maze.txt', (22,22) )
+    new_maze('./maze.txt', (30,30) )
 
