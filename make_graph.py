@@ -2,11 +2,7 @@ import maze
 from graph import *
 
 
-def make_graph(laby):
-  for i in range(len(laby)):
-    for j in range(len(laby[i])):
-      if laby[i][j] == 2:
-        entree = (i, j)
+def make_graph(laby, entree):
   graph = new_graph()
   add_vertex(graph, entree)
   return noeud_suiv(laby, graph, entree)
