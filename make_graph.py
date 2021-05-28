@@ -7,8 +7,6 @@ def make_graph(laby):
     for j in range(len(laby[i])):
       if laby[i][j] == 2:
         entree = (i, j)
-      elif laby[i][j] == 3:
-        sortie = (i, j)
   graph = new_graph()
   add_vertex(graph, entree)
   return noeud_suiv(laby, graph, entree)
@@ -63,10 +61,5 @@ def noeud_suiv(laby, graph, noeud):
 
 
 if __name__ == "__main__":
-  laby = [[1, 1, 1, 1, 1, 1],
-     [2, 0, 1, 1, 0, 1],
-     [1, 0, 0, 0, 0, 1],
-     [1, 1, 0, 1, 1, 1],
-     [1, 0, 0, 0, 0, 1],
-     [1, 0, 1, 1, 0, 1],
-     [1, 1, 1, 1, 3, 1]]
+  laby = maze.open_maze('./maze.txt')
+  make_graph(laby)
