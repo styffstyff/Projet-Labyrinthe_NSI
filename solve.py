@@ -87,6 +87,30 @@ def depth_first_search(G, start, end, cur_vertex=None, visited=None, path=None):
         if res:
             return res
 
+
+def check(laby, sol, start, end):
+    pos = start
+    for direction in sol:
+        if direction == 'N':
+            pos = go_N(pos)
+
+        elif direction == 'S':
+            pos = go_S(pos)
+
+        elif direction == 'E':
+            pos = go_E(pos)
+            
+        else:
+            pos = go_W(pos)
+
+        if laby[pos[0]][pos[1]] != 0:
+                return 'Solution éronnée'
+    if pos == end:
+        return 'Solution vérifiée'
+    else:
+        return 'Solution éronnée'
+
+
 if __name__ == "__main__":
     """
     [[1, 1, 1, 1, 1, 1],
