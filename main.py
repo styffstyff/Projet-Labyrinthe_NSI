@@ -15,3 +15,5 @@ solution = solve.dead_end_filling(graph, start, exit)
 print(solution)
 
         
+solve.check(maze_example, solution, start, exit)
+        
