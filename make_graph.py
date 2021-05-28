@@ -1,4 +1,4 @@
-import main
+import maze
 from graph import *
 
 

@@ -36,7 +36,7 @@ def mark_start(pos, maze):
     maze[pos[0]][pos[1]]=2
     return maze
 
-def mark_exit(pos, maze):
+def mark_exit(pos, maze, walls):
     """
     Mark the number 3 on the maze which symbolize the 'exit'
     :return list: maze with an exit
@@ -50,7 +50,7 @@ def mark_exit(pos, maze):
     exit_points.sort( key=lambda coord: distance((pos, coord )), reverse=True)
 
     #Check if the position of the exit point is near a path
-    pos_move=moves1(exit_points[0], maze)
+    pos_move=moves1(exit_points[0], maze, walls)
 
     #We assume that their must be a path within 2 blocks of distance
     #We check at one block distance
@@ -58,7 +58,7 @@ def mark_exit(pos, maze):
         maze[exit_points[0][0]][exit_points[0][1]]=3
     #We check at two block distance
     else:
-        pos_move=moves(exit_points[0], maze)
+        pos_move=moves(exit_points[0], maze, walls)
         maze[pos_move[0][0][0]][pos_move[0][0][1]]=0
         maze[exit_points[0][0]][exit_points[0][1]]=3
     return maze
@@ -71,7 +71,9 @@ def mark_visited(pos, maze):
     maze[pos[0]][pos[1]]=9
     return maze
 
-def add_wall(pos, maze):
+#####################################
+
+def add_wall(pos, maze, walls):
     """
     Add walls around pos
     :return tuple: maze, wall in the maze
@@ -81,9 +83,11 @@ def add_wall(pos, maze):
     neighbors=[go_n(pos), go_s(pos), go_e(pos), go_w(pos)]
     for coord in neighbors:
         if y_len>coord[0]>=0 and x_len>coord[1]>=0:
-            if maze[coord[0]][coord[1]]==0:
-                maze[coord[0]][coord[1]]=1
-    return maze
+            if coord not in walls:
+                walls.append(coord)
+    return walls
+
+#####################################
 
 def blank_maze(xy_coord):
     """
@@ -94,7 +98,7 @@ def blank_maze(xy_coord):
     assert xy_coord[0]>=5, "The maze must be larger."
     assert xy_coord[1]>=5, "The maze must be larger."
 
-    maze=[[0 for x in range(xy_coord[1])]for y in range(xy_coord[0])]
+    maze=[[1 for x in range(xy_coord[1])]for y in range(xy_coord[0])]
 
     return maze
 
@@ -111,9 +115,9 @@ def is_maze(maze):
             return False
     return True
 
-def moves1(pos, maze):
+def moves1(pos, maze, walls):
     """
-    Search the unvisited neighbors 2 blocks around of pos
+    Search the unvisited neighbors 1 block around of pos
     :return list: list of unvisited points
     """
     y_len=len(maze)
@@ -128,11 +132,15 @@ def moves1(pos, maze):
     move=[]
     for index, coord in enumerate(pos_move):
         if y_len>coord[0]>=0 and x_len>coord[1]>=0:
-            if maze[coord[0]][coord[1]]==0:
+
+            if coord not in walls:
                 move.append(pos_move[index])
+            elif maze[coord[0]][coord[1]]==0:
+                move.append(pos_move[index])
+             
     return move
 
-def moves(pos, maze):
+def moves(pos, maze, walls):
     """
     Search the unvisited neighbors 2 blocks around of pos
     :return list: list of unvisited points
@@ -150,8 +158,13 @@ def moves(pos, maze):
     move=[]
     for index, coord in enumerate(pos_move):
         if y_len>coord[1][0]>=0 and x_len>coord[1][1]>=0:
-            if maze[coord[1][0]][coord[1][1]]==0:
+            
+            if coord[1] not in walls:
                 move.append(pos_move[index])
+
+            elif maze[coord[1][0]][coord[1][1]]==0:
+                move.append(pos_move[index])
+
             if maze[coord[1][0]][coord[1][1]]==9:
                 move.append(0)
     return move
@@ -163,26 +176,25 @@ def make_walls(maze):
     :return list: maze
     """
 
-    walls=wall(maze)
+    outline=wall(maze)
 
     stack=[]
+    walls=[]
 
     assert is_maze(maze), "The argument is not a maze"
 
     #We always start the maze from a random point
-    start=walls[randint(0, len(walls)-1)]
+    start=outline[randint(0, len(outline)-1)]
     maze = mark_start(start, maze)
     stack.append(start)
     maze=rec_dfsa(start, maze, stack, walls)
 
     for y_pos,row in enumerate(maze):
         for x_pos,value in enumerate(row):
-            if value==0:
-                maze[y_pos][x_pos]=1
             if value==9:
                 maze[y_pos][x_pos]=0
 
-    maze=mark_exit(start, maze)
+    maze=mark_exit(start, maze, walls)
 
     return maze
 
@@ -196,7 +208,7 @@ def rec_dfsa(pos, maze, stack, walls):
     #If the stack is empty every accessible point have been reached
     if len(stack)==0:
         return maze
-    pos_move=moves(pos, maze)
+    pos_move=moves(pos, maze, walls)
     #If every neighbor is already visited we move backward
     if pos_move.count(0) == len(pos_move):
         pos=stack.pop()
@@ -208,9 +220,9 @@ def rec_dfsa(pos, maze, stack, walls):
         for coord in move:
             maze=mark_visited(coord, maze)
             stack.append(coord)
-        maze=add_wall(pos, maze)
+        walls=add_wall(pos, maze, walls)
 
-        maze=add_wall(stack[-2], maze)
+        walls=add_wall(stack[-2],maze, walls)
 
 
         rec_dfsa(move[1], maze, stack, walls)
@@ -247,4 +259,7 @@ def open_maze(filepath):
         return maze
 
 if __name__ == "__main__":
-    new_maze('./maze.txt', (22,22) )
+    
+    for e in range(100):
+        new_maze('./maze.txt', (22,22) )
+
