@@ -61,54 +61,52 @@ def dead_end_filling(G, start, end):
 
 def depth_first_search(G, start, end, cur_vertex=None, visited=None, path=None):
     """
-    Depth-first search algorithm.
+    depth-first search algorithm.
     Follow a path util its end.
     If it leads to a dead-end, choose another path.
     If it leads to the end of the maze, return this path.
-    :return str: the solution of the labyrinth
+    :return str: the solution of the maze
     """
     if cur_vertex is None:
         cur_vertex = start
     if visited is None:
         visited = set()
-        visited.add(start)
     if path is None:
         path = list()
 
+    visited.add(cur_vertex)
     path.append(cur_vertex)
+
+    if cur_vertex == end:
+        return vertices_to_path(path)
+
+    if not G[cur_vertex].difference(visited):
+        return
 
     # iterates on each adjacent vertex that has not already been visited
     for vertex in G[cur_vertex].difference(visited):
-        if vertex == end:
-            path.append(vertex)
-            return vertices_to_path(path)
-
         res = depth_first_search(G, start, end, vertex, visited, path)
         if res:
             return res
 
-
-def check(laby, sol, start, end):
+def check(maze, start, end, solution):
     pos = start
-    for direction in sol:
+    for direction in solution:
         if direction == 'N':
             pos = go_N(pos)
-
         elif direction == 'S':
             pos = go_S(pos)
-
         elif direction == 'E':
             pos = go_E(pos)
-            
         else:
             pos = go_W(pos)
 
-        if laby[pos[0]][pos[1]] != 0:
-                return 'Solution éronnée'
+        if maze[pos[0]][pos[1]] == 1:
+            return False
+
     if pos == end:
-        return 'Solution vérifiée'
-    else:
-        return 'Solution éronnée'
+        return True
+    return False
 
 
 if __name__ == "__main__":
@@ -151,3 +149,44 @@ if __name__ == "__main__":
 
     assert dead_end_filling(G, start, end) == "ESESSEESS"
     assert depth_first_search(G, start, end) == "ESESSEESS"
+
+    laby = [[1, 1, 1, 1, 1, 1],
+            [2, 0, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 0, 1],
+            [1, 1, 1, 1, 3, 1]]
+
+    start = (1, 0)
+    end = (6, 4)
+
+    G = graph.new_graph()
+    graph.add_vertex(G, start)
+    graph.add_vertex(G, (1, 1))
+    graph.add_vertex(G, (2, 1))
+    graph.add_vertex(G, (2, 2))
+    graph.add_vertex(G, (2, 4))
+    graph.add_vertex(G, (1, 4))
+    graph.add_vertex(G, (4, 2))
+    graph.add_vertex(G, (4, 1))
+    graph.add_vertex(G, (5, 1))
+    graph.add_vertex(G, (4, 4))
+    graph.add_vertex(G, end)
+
+    graph.add_arc(G, start, (1, 1))
+    graph.add_arc(G, (1, 1), (2, 1))
+    graph.add_arc(G, (2, 1), (2, 2))
+    graph.add_arc(G, (2, 2), (2, 4))
+    graph.add_arc(G, (2, 4), (1, 4))
+
+    graph.add_arc(G, (2, 4), (4, 4))
+
+    graph.add_arc(G, (2, 2), (4, 2))
+    graph.add_arc(G, (4, 2), (4, 1))
+    graph.add_arc(G, (4, 1), (5, 1))
+    graph.add_arc(G, (4, 2), (4, 4))
+    graph.add_arc(G, (4, 4), end)
+
+    solution = depth_first_search(G, start, end)
+    assert check(laby, start, end, solution)
