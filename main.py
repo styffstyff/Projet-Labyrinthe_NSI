@@ -2,9 +2,10 @@
 Main module
 """
 
-import maze
 from make_graph import make_graph
+import maze
 import solve
+
 import random
 
 size = (random.randint(5, 25), random.randint(5, 25))
