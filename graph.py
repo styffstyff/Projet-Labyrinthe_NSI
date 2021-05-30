@@ -1,5 +1,5 @@
 """
-Graph implementation with the set of successors.
+Undirected-graph implementation with the set of successors.
 """
 
 def new_graph():
@@ -54,15 +54,18 @@ def add_arc(G, v1, v2):
     assert is_vertex(G, v1), "Can't add an arc : the vertex v1 doesn't exist."
     assert is_vertex(G, v2), "Can't add an arc : the vertex v2 doesn't exist."
     G[v1].add(v2)
+    G[v2].add(v1)
 
 def del_arc(G, v1, v2):
     """
     Deletes from the graph `G` the arc from `v1` to `v2`.
-    The arc `v1 -> v2` must already exist in the graph `G`.
+    The arc `v1 - v2` must already exist in the graph `G`.
     :return None:
     """
     assert is_arc(G, v1, v2), "Can't delete an arc : the arc doesn't exist."
+    assert is_arc(G, v2, v1), "Can't delete an arc : the arc doesn't exist."
     G[v1].remove(v2)
+    G[v2].remove(v1)
 
 def successors(G, v):
     """
@@ -88,12 +91,11 @@ if __name__ == "__main__":
     add_arc(G, "B", "C")
     add_arc(G, "C", "A")
 
-    assert G == {"A":{"B", "C"}, "B":{"C"}, "C":{"A"}}
+    assert G == {"A":{"B", "C"}, "B":{"A", "C"}, "C":{"A", "B"}}
     assert is_arc(G, "A", "B")
     assert is_arc(G, "A", "C")
     assert is_arc(G, "B", "C")
     assert is_arc(G, "C", "A")
-    assert not is_arc(G, "C", "B")
 
     del_arc(G, "A", "C")
 

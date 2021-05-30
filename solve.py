@@ -41,19 +41,20 @@ def dead_end_filling(G, start, end):
     stop = False
     while not stop:
         stop = True
-        # usage of `list(G)` instead of `G.items()`
+        # usage of `list(G)` instead of `G.keys()`
         # to avoid `RuntimeError: dictionary changed size during iteration`
         for k in list(G):
-            if G[k] == set() and k != end:
+            if len(G[k]) <= 1 and k != start and k != end:
                 graph.del_vertex(G, k)
                 stop = False
-
     # translate from graph to a list of vertices
     pos = start
     vertices = [pos]
     while pos != end:
-        assert len(G[pos]) == 1, "Maze unsolvable using dead_end_filling algorithm."
+        assert len(G[pos]) <= 2, "Maze unsolvable using dead_end_filling algorithm."
         next_pos = list(G[pos])[0]
+        if next_pos in vertices:
+            next_pos = list(G[pos])[1]
         vertices.append(next_pos)
         pos = next_pos
 
@@ -110,6 +111,8 @@ def check(maze, start, end, solution):
 
 
 if __name__ == "__main__":
+    import make_graph
+
     """
     [[1, 1, 1, 1, 1, 1],
      [2, 0, 1, 1, 0, 1],
@@ -161,32 +164,7 @@ if __name__ == "__main__":
     start = (1, 0)
     end = (6, 4)
 
-    G = graph.new_graph()
-    graph.add_vertex(G, start)
-    graph.add_vertex(G, (1, 1))
-    graph.add_vertex(G, (2, 1))
-    graph.add_vertex(G, (2, 2))
-    graph.add_vertex(G, (2, 4))
-    graph.add_vertex(G, (1, 4))
-    graph.add_vertex(G, (4, 2))
-    graph.add_vertex(G, (4, 1))
-    graph.add_vertex(G, (5, 1))
-    graph.add_vertex(G, (4, 4))
-    graph.add_vertex(G, end)
-
-    graph.add_arc(G, start, (1, 1))
-    graph.add_arc(G, (1, 1), (2, 1))
-    graph.add_arc(G, (2, 1), (2, 2))
-    graph.add_arc(G, (2, 2), (2, 4))
-    graph.add_arc(G, (2, 4), (1, 4))
-
-    graph.add_arc(G, (2, 4), (4, 4))
-
-    graph.add_arc(G, (2, 2), (4, 2))
-    graph.add_arc(G, (4, 2), (4, 1))
-    graph.add_arc(G, (4, 1), (5, 1))
-    graph.add_arc(G, (4, 2), (4, 4))
-    graph.add_arc(G, (4, 4), end)
+    G = make_graph.make_graph(laby)
 
     solution = depth_first_search(G, start, end)
     assert check(laby, start, end, solution)
