@@ -21,7 +21,7 @@ def noeud_suiv(laby, graph, noeud):
   sud = (noeud[0]+1, noeud[1])
   est = (noeud[0], noeud[1]+1)
   ouest = (noeud[0], noeud[1]-1)
-  if nord > 0 or nord < len(laby):
+  if nord[0] > 0:
     if laby[nord[0]][nord[1]] == 0 or laby[nord[0]][nord[1]] == 3:
       if is_vertex(graph, nord):
         pass
@@ -29,7 +29,7 @@ def noeud_suiv(laby, graph, noeud):
         add_vertex(graph, nord)
         add_arc(graph, noeud, nord)
         noeud_suiv(laby, graph, nord)
-  if sud > 0 or sud < len(laby):
+  if sud[0] < len(laby):
     if laby[sud[0]][sud[1]] == 0 or laby[sud[0]][sud[1]] == 3:
       if is_vertex(graph, sud):
         pass
@@ -37,7 +37,7 @@ def noeud_suiv(laby, graph, noeud):
         add_vertex(graph, sud)
         add_arc(graph, noeud, sud)
         noeud_suiv(laby, graph, sud)
-  if est > 0 or est < len(laby[0]):
+  if est[1] < len(laby[0]):
     if laby[est[0]][est[1]] == 0 or laby[est[0]][est[1]] == 3:
       if is_vertex(graph, est):
         pass
@@ -45,7 +45,7 @@ def noeud_suiv(laby, graph, noeud):
         add_vertex(graph, est)
         add_arc(graph, noeud, est)
         noeud_suiv(laby, graph, est)
-  if ouest > 0 or ouest < len(laby[0]):
+  if ouest[1] > 0:
     if laby[ouest[0]][ouest[1]] == 0 or laby[ouest[0]][ouest[1]] == 3:
       if is_vertex(graph, ouest):
         pass
@@ -58,4 +58,4 @@ def noeud_suiv(laby, graph, noeud):
 
 if __name__ == "__main__":
   laby = [[0, 0, 0]]
-  make_graph(laby)
+  make_graph(laby, (0, 0))
