@@ -3,12 +3,20 @@ from graph import *
 
 
 def make_graph(laby, entree):
+  """
+  Create graph and vertex of starting
+  :return fonction: noeud_suivant
+  """
   graph = new_graph()
   add_vertex(graph, entree)
   return noeud_suiv(laby, graph, entree)
 
 
 def noeud_suiv(laby, graph, noeud):
+  """
+  Recursive fonction which use to create the graph
+  :return fonction or graph:
+  """
   nord = (noeud[0]-1, noeud[1])
   sud = (noeud[0]+1, noeud[1])
   est = (noeud[0], noeud[1]+1)
