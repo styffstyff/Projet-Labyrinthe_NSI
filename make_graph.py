@@ -57,5 +57,5 @@ def noeud_suiv(laby, graph, noeud):
 
 
 if __name__ == "__main__":
-  laby = maze.open_maze('./maze.txt')
+  laby = [[0, 0, 0]]
   make_graph(laby)
