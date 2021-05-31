@@ -59,4 +59,4 @@ def noeud_suiv(laby, graph, noeud):
 if __name__ == "__main__":
   laby = [[2, 0, 1],
           [1, 0, 3]]
-  make_graph(laby, (0, 0))
+  make_graph(laby, (0, 0)) == {(0, 0): {(0, 1)}, (0, 1): {(1, 1)}, (1, 1): {(1, 2)}, (1, 2): set()}
