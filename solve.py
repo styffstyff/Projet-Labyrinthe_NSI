@@ -86,7 +86,7 @@ def depth_first_search(G, start, end, cur_vertex=None, visited=None, path=None):
 
     # iterates on each adjacent vertex that has not already been visited
     for vertex in G[cur_vertex].difference(visited):
-        res = depth_first_search(G, start, end, vertex, visited, path)
+        res = depth_first_search(G, start, end, vertex, deepcopy(visited), deepcopy(path))
         if res:
             return res
 
