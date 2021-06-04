@@ -262,6 +262,6 @@ def open_maze(filepath):
     return maze, start, exit
 
 if __name__ == "__main__":
-    open_maze('./maze.txt')
-    #new_maze('./maze.txt', (30,30) )
+    #open_maze('./maze.txt')
+    new_maze('./maze.txt', (30,30) )
 
